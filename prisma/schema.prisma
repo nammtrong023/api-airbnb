@@ -1,0 +1,100 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Gender {
+    MALE
+    FEMALE
+}
+
+enum Role {
+    NGUOI_TAO
+    NGUOI_THUE
+}
+
+model NguoiDung {
+    id             Int        @id @default(autoincrement())
+    ho_ten         String     @db.VarChar(255)
+    email          String @unique @db.VarChar(255)
+    mat_khau       String @db.VarChar(255)
+    sdt            String @db.VarChar(15)
+    ngay_sinh      DateTime 
+    gioi_tinh      Gender
+    role           Role
+    ky_nang        String @db.VarChar(255)
+    chung_nhan     String @db.VarChar(255)
+
+    thue_cong_viec ThueCongViec[]
+    binh_luan      BinhLuan[]
+    cong_viec CongViec[]
+}
+
+model BinhLuan {
+    id              Int       @id @default(autoincrement())
+    noi_dung        String @db.VarChar(255)
+    sao_binh_luan   Int
+    ngay_binh_luan  DateTime
+
+    ma_cong_viec    Int
+    cong_viec       CongViec @relation(fields: [ma_cong_viec], references: [id])
+
+    ma_nguoi_binh_luan Int
+    nguoi_binh_luan   NguoiDung @relation(fields: [ma_nguoi_binh_luan], references: [id])
+}
+
+model ThueCongViec {
+    id          Int       @id @default(autoincrement())
+    ngay_thue   DateTime
+    hoan_thanh  Boolean
+
+    ma_cong_viec Int
+    cong_viec  CongViec @relation(fields: [ma_cong_viec], references: [id])
+
+    ma_nguoi_thue Int
+    nguoi_thue NguoiDung @relation(fields: [ma_nguoi_thue], references: [id])
+}
+
+
+model CongViec {
+    id                Int       @id @default(autoincrement())
+    ten_cong_viec     String @db.VarChar(255)
+    danh_gia          Int
+    gia_tien          Int
+    hinh_anh          String @db.VarChar(255)
+    mo_ta             String @db.VarChar(255)
+    mo_ta_ngan        String @db.VarChar(255)
+    sao_cong_viec     Int
+
+    ma_chi_tiet_loai_cv  Int
+    chi_tiet_loai_cv  ChiTietLoaiCongViec @relation(fields: [ma_chi_tiet_loai_cv], references: [id])
+
+
+    ma_nguoi_tao         Int
+    nguoi_tao  NguoiDung @relation(fields: [ma_nguoi_tao], references: [id])
+
+    thue_cong_viec ThueCongViec[]
+    binh_luan BinhLuan[]
+}
+
+model ChiTietLoaiCongViec {
+    id                Int       @id @default(autoincrement())
+    ten_chi_tiet      String @db.VarChar(255)
+    hinh_anh          String @db.VarChar(255)
+    
+    cong_viec CongViec[]
+
+    ma_loai_cong_viec Int
+    loai_cong_viec    LoaiCongViec @relation(fields: [ma_loai_cong_viec], references: [id])
+}
+
+model LoaiCongViec {
+  id                Int       @id @default(autoincrement())
+  ten_loai_cong_viec String @db.VarChar(255)
+
+  chi_tiet_loai_cv ChiTietLoaiCongViec[]
+}
