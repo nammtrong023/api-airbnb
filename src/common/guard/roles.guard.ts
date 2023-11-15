@@ -6,17 +6,23 @@ import {
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { Roles } from '../decorator/roles.decorator';
+import { UsersService } from 'src/users/users.service';
 
 @Injectable()
 export class RolesGuard implements CanActivate {
-  constructor(private reflector: Reflector) {}
+  constructor(
+    private reflector: Reflector,
+    private userService: UsersService,
+  ) {}
 
-  canActivate(context: ExecutionContext): boolean {
+  async canActivate(context: ExecutionContext): Promise<boolean> {
     const roles = this.reflector.get(Roles, context.getHandler());
     const request = context.switchToHttp().getRequest();
 
     if (request?.user) {
-      const matchRole = roles.includes(request.user.role);
+      const user = await this.userService.getUser(request.user.id);
+
+      const matchRole = roles.includes(user.role);
 
       if (!matchRole) {
         throw new ForbiddenException('Use only for the HOST role.');

@@ -41,10 +41,10 @@ model Comment {
   comment_date        DateTime
 
   room_id             Int
-  room                Room        @relation(fields: [room_id], references: [id])
+  room                Room        @relation(fields: [room_id], references: [id], onDelete: Cascade)
 
   user_id             Int
-  user                User        @relation(fields: [user_id], references: [id])
+  user                User        @relation(fields: [user_id], references: [id], onDelete: Cascade)
 }
 
 model Room {
@@ -67,10 +67,10 @@ model Room {
   swimming_pool   Boolean
 
   location_id     Int
-  location        Location    @relation(fields: [location_id], references: [id])
+  location        Location    @relation(fields: [location_id], references: [id], onDelete: Cascade)
 
   owner_id        Int
-  owner           User    @relation(fields: [owner_id], references: [id])
+  owner           User    @relation(fields: [owner_id], references: [id], onDelete: Cascade)
 
   comments        Comment[]
   bookings        Booking[]
@@ -83,10 +83,10 @@ model Booking {
   num_guests      Int
 
   room_id         Int
-  room            Room        @relation(fields: [room_id], references: [id])
+  room            Room        @relation(fields: [room_id], references: [id], onDelete: Cascade)
 
   user_id         Int
-  user            User        @relation(fields: [user_id], references: [id])
+  user            User        @relation(fields: [user_id], references: [id], onDelete: Cascade)
 }
 
 model Location {

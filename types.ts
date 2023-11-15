@@ -8,7 +8,6 @@ export type Tokens = {
 export type JwtPayload = {
   id: number;
   email: string;
-  role: string;
 };
 
 export type JwtPayloadWithRtToken = JwtPayload & { refreshToken: string };

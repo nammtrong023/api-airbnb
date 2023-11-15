@@ -60,7 +60,7 @@ export class AuthService {
       throw new HttpException("Password doesn't correct", 401);
     }
 
-    const tokens = await this.generateTokens(user.id, user.email, user.role);
+    const tokens = await this.generateTokens(user.id, user.email);
     await this.updateRtHash(user.id, tokens.refreshToken);
 
     return tokens;
@@ -83,7 +83,7 @@ export class AuthService {
       throw new HttpException('Invalid token', 400);
     }
 
-    const tokens = await this.generateTokens(user.id, user.email, user.role);
+    const tokens = await this.generateTokens(user.id, user.email);
     await this.updateRtHash(user.id, tokens.refreshToken);
 
     return tokens;
@@ -102,15 +102,10 @@ export class AuthService {
     });
   }
 
-  async generateTokens(
-    id: number,
-    email: string,
-    role: string,
-  ): Promise<Tokens> {
+  async generateTokens(id: number, email: string): Promise<Tokens> {
     const payload = {
       id,
       email,
-      role,
     };
 
     const accessToken = await this.jwtService.signAsync(payload, {
