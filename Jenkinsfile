@@ -31,13 +31,13 @@ pipeline {
         stage('Deploy Postgres to DEV') {
             steps {
                 echo 'Deploying and cleaning'
-                sh 'docker image pull postgres:8.0'
+                sh 'docker image pull postgres'
                 sh 'docker network create dev || echo "this network exists"'
                 sh 'docker container stop namtrong-postgres || echo "this container does not exist" '
-                sh 'echo y | docker container prune '
+                sh 'echo y | docker container prune'
                 sh 'docker volume rm namtrong-postgres-data || echo "no volume"'
 
-                sh "docker run --name namtrong-postgres --rm --network dev -v namtrong-postgres-data:/var/lib/postgres -e POSTGRES_ROOT_PASSWORD=${POSTGRES_ROOT_LOGIN_PSW} -e POSTGRES_DATABASE=db_example  -d postgres:8.0 "
+                sh "docker run --name namtrong-postgres --rm --network dev -v namtrong-postgres-data:/var/lib/postgres -e POSTGRES_ROOT_PASSWORD=${POSTGRES_ROOT_LOGIN_PSW} -e POSTGRES_DATABASE=db_example -d postgres"
                 sh 'sleep 20'
                 sh "docker exec -i namtrong-postgres postgres --user=root --password=${POSTGRES_ROOT_LOGIN_PSW} < script"
             }
@@ -46,7 +46,7 @@ pipeline {
         stage('Deploy NestJS to DEV') {
             steps {
                 echo 'Deploying and cleaning'
-                sh 'docker image pull nammtrong023/nestjs'
+                sh 'docker image pull nestjs/cli'
                 sh 'docker container stop namtrong-nestjs || echo "this container does not exist" '
                 sh 'docker network create dev || echo "this network exists"'
                 sh 'echo y | docker container prune '
