@@ -22,7 +22,7 @@ pipeline {
 
             steps {
                 withDockerRegistry(credentialsId: 'dockerhub', url: 'https://index.docker.io/v1/') {
-                    sh 'docker build . -t nammtrong023/nestjs .'
+                    sh 'docker build . -t nammtrong023/nestjs'
                     sh 'docker push nammtrong023/nestjs'
                 }
             }
