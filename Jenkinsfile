@@ -1,0 +1,65 @@
+pipeline {
+
+    agent any
+
+    tools { 
+        nodejs 'my-nodejs' 
+    }
+    environment {
+        POSTGRES_ROOT_LOGIN = credentials('my-postgres')
+    }
+    stages {
+
+        stage('Build with Nodejs') {
+            steps {
+                sh 'node --version'
+                // sh 'java -version'
+                // sh 'node clean package -Dmaven.test.failure.ignore=true'
+            }
+        }
+
+        stage('Packaging/Pushing images') {
+
+            steps {
+                withDockerRegistry(credentialsId: 'dockerhub', url: 'https://index.docker.io/v1/') {
+                    sh 'docker build -t nammtrong023/nestjs .'
+                    sh 'docker push nammtrong023/nestjs'
+                }
+            }
+        }
+
+        stage('Deploy Postgres to DEV') {
+            steps {
+                echo 'Deploying and cleaning'
+                sh 'docker image pull postgres:8.0'
+                sh 'docker network create dev || echo "this network exists"'
+                sh 'docker container stop my-postgres || echo "this container does not exist" '
+                sh 'echo y | docker container prune '
+                sh 'docker volume rm namtrong-postgres-data || echo "no volume"'
+
+                sh "docker run --name namtrong-postgres --rm --network dev -v namtrong-postgres-data:/var/lib/postgres -e POSTGRES_ROOT_PASSWORD=${POSTGRES_ROOT_LOGIN_PSW} -e POSTGRES_DATABASE=db_example  -d postgres:8.0 "
+                sh 'sleep 20'
+                sh "docker exec -i my-postgres postgres --user=root --password=${POSTGRES_ROOT_LOGIN_PSW} < script"
+            }
+        }
+
+        stage('Deploy NestJS to DEV') {
+            steps {
+                echo 'Deploying and cleaning'
+                sh 'docker image pull nammtrong023/nestjs'
+                sh 'docker container stop namtrong-nestjs || echo "this container does not exist" '
+                sh 'docker network create dev || echo "this network exists"'
+                sh 'echo y | docker container prune '
+
+                sh 'docker container run -d --rm --name nammtrong-nestjs -p 8080:8080 --network dev nammtrong-nestjs'
+            }
+        }
+ 
+    }
+    post {
+        // Clean after build
+        always {
+            cleanWs()
+        }
+    }
+}
