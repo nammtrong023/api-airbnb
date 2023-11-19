@@ -23,8 +23,11 @@ pipeline {
             steps {
                 script {
                     withDockerRegistry(credentialsId: 'dockerhub') {
+                        echo 'login'
                         sh 'docker build -t nammtrong023/nestjs .'
+                        echo 'build'
                         sh 'docker push nammtrong023/nestjs'
+                        echo 'push'
                     }
                 }
             }
