@@ -19,21 +19,13 @@ pipeline {
             }
         }
 
-        stage("env") {
-            steps {
-                echo "The build number is ${env.BUILD_NUMBER}"
-                echo "You can also use \${BUILD_NUMBER} -> ${BUILD_NUMBER}"
-                sh 'echo "I can access $BUILD_NUMBER in shell command as well."'
-            }
-        }
-
         stage('Packaging/Pushing images') {
-
             steps {
-                withDockerRegistry(credentialsId: 'dockerhub', url: 'https://index.docker.io/v1/') {
-                    echo "${DOCKER}"
-                    sh 'docker build . -t nammtrong023/nestjs'
-                    sh 'docker push nammtrong023/nestjs'
+                script {
+                    withDockerRegistry(credentialsId: 'dockerhub') {
+                        sh 'docker build -t nammtrong023/nestjs .'
+                        sh 'docker push nammtrong023/nestjs'
+                    }
                 }
             }
         }

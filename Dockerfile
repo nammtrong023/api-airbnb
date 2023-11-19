@@ -1,5 +1,5 @@
 # B1: cài môi trường Node
-FROM node:20 as build_stage
+FROM node:20.9.0 as build_stage
 
 # tạo folder /app
 WORKDIR /app
