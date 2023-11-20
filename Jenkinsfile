@@ -36,7 +36,7 @@ pipeline {
 
                 sh "docker run --name namtrong-postgres --rm -v postgres-data:/var/lib/postgres -e POSTGRES_USER=${POSTGRES_ROOT_LOGIN} -e POSTGRES_PASSWORD=${POSTGRES_ROOT_LOGIN_PSW} -e POSTGRES_DB=airbnb -p 5432:5432 -d postgres:14.10"
                 sh 'sleep 20'
-                sh "docker exec -i namtrong-postgres postgres --user=nammtrong023 --password=${POSTGRES_ROOT_LOGIN_PSW}"
+                sh "docker exec -i namtrong-postgres postgres --user=nammtrong023 --password=${POSTGRES_ROOT_LOGIN_PSW} < script"
             }
         }
 
