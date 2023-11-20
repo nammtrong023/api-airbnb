@@ -19,13 +19,13 @@ pipeline {
 
         stage('Packaging/Pushing images') {
             steps {
-                    withDockerRegistry(credentialsId: 'dockerhub') {
-                        echo 'login'
-                        sh 'docker build -t nammtrong/fiver .'
-                        echo 'build'
-                        sh 'docker push nammtrong/fiver'
-                        echo 'push'
-                    }
+                withDockerRegistry(credentialsId: 'dockerhub', url: 'https://index.docker.io/v1/') {
+                    echo 'login'
+                    sh 'docker build -t nammtrong/fiver .'
+                    echo 'build'
+                    sh 'docker push nammtrong/fiver'
+                    echo 'push'
+                }
             }
         }
 
