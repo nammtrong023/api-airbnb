@@ -20,8 +20,8 @@ pipeline {
         stage('Packaging/Pushing images') {
             steps {
                 withDockerRegistry(credentialsId: 'dockerhub', url: 'https://index.docker.io/v1/') {
-                    sh 'docker build -t nammtrong023/api-fiver .'
-                    sh 'docker push nammtrong023/api-fiver'
+                    sh 'docker build -t nammtrong023/api-airbnb .'
+                    sh 'docker push nammtrong023/api-airbnb'
                 }
             }
         }
@@ -44,12 +44,12 @@ pipeline {
         stage('Deploy App to DEV') {
             steps {
                 echo 'Deploying and cleaning'
-                sh 'docker image pull nammtrong023/api-fiver'
-                sh 'docker container stop nammtrong023/api-fiver || echo "this container does not exist" '
+                sh 'docker image pull nammtrong023/api-airbnb'
+                sh 'docker container stop nammtrong023/api-airbnb || echo "this container does not exist" '
                 sh 'docker network create dev || echo "this network exists"'
                 sh 'echo y | docker container prune '
 
-                sh 'docker container run -d --rm --name nammtrong023/api-fiver -p 8080:8080 nammtrong023/api-fiver'
+                sh 'docker container run -d --rm --name nammtrong023/api-airbnb -p 8080:8080 nammtrong023/api-airbnb'
             }
         }
  
