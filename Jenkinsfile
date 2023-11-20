@@ -1,12 +1,12 @@
 pipeline {
-
+// dckr_pat_rEUkUPUPUs7qKplLYer3ecHNk5U
     agent any
 
     tools { 
         nodejs 'my-nodejs' 
     }
     environment {
-        POSTGRES_ROOT_LOGIN = credentials('my-postgres')
+        POSTGRES_ROOT_LOGIN = credentials('postgres')
         DOCKERHUB_CREDENTIALS = credentials('dockerhub')
     }
     stages {
@@ -17,22 +17,13 @@ pipeline {
             }
         }
 
-        stage('Login') {
-            steps {
-                withDockerRegistry(credentialsId: 'dockerhub', url: 'https://index.docker.io/v1/') {
-                    echo 'Logged'
-                }
-            }
-        }
-
-// dckr_pat_rEUkUPUPUs7qKplLYer3ecHNk5U
         stage('Packaging/Pushing images') {
             steps {
+                withDockerRegistry(credentialsId: 'dockerhub', url: 'https://index.docker.io/v1/') {
                     sh 'docker build -t nammtrong023/api-fiver .'
-                    echo 'build'
                     sh 'docker push nammtrong023/api-fiver'
-                    echo 'push'
                 }
+            }
         }
 
         stage('Deploy Postgres to DEV') {
