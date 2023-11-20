@@ -17,11 +17,14 @@ pipeline {
             }
         }
 
-       stage('Login') {
+             stage('Login') {
             steps {
-                sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+                withDockerRegistry(credentialsId: 'dockerhub', url: 'https://index.docker.io/v1/') {
+                   echo 'logged'
+                }
             }
         }
+
 
 // dckr_pat_rEUkUPUPUs7qKplLYer3ecHNk5U
         stage('Packaging/Pushing images') {
