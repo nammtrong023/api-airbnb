@@ -1,28 +1,18 @@
-# B1: cài môi trường Node
-FROM node:20.9.0 as build_stage
+FROM node:20-alpine3.17
 
-# tạo folder /app
 WORKDIR /app
 
-# COPY file package.json và package-lock.json vào image
-# . : copy 2 file package.json vào folder app
-COPY package*.json .
+COPY package*.json ./
+COPY prisma ./prisma/
+COPY .env ./
 
-# npm install
 RUN npm install
+RUN npx prisma generate
 
-# copy toàn bộ source code BE vào image
-# . đầu tiên: copy toàn bộ folder cùng cấp với Dockerfile
-# . thứ hai: copy toàn bộ folder đó vào trong folder /app của images
 COPY . .
+
+RUN npm run build
 
 EXPOSE 8080
 
-# npm run start
-CMD ["npm", "start"]
-
-# docker build . -t node36
-# . : tìm file Dockerfile để build image
-
-# build container dựa vào image
-# docker run -d -p 8081:8080 --name node36_container node36
+CMD [ "npm", "run", "start:migrate:prod" ]
