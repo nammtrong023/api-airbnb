@@ -17,12 +17,11 @@ pipeline {
             }
         }
 
-         stage('Login') {
+        stage('Login') {
             withDockerRegistry(credentialsId: 'dockerhub', url: 'https://index.docker.io/v1/') {
                 echo 'Logged'
             }
-
-
+        }
 
 // dckr_pat_rEUkUPUPUs7qKplLYer3ecHNk5U
         stage('Packaging/Pushing images') {
