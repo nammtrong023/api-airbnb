@@ -17,12 +17,21 @@ pipeline {
             }
         }
 
+        stage('Login') {
+            steps {
+                script {
+                    withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'DOCKERHUB_CREDENTIALS_USR', passwordVariable: 'DOCKERHUB_CREDENTIALS_PSW')]) {
+                        sh "echo \$DOCKERHUB_CREDENTIALS_PSW | docker login -u \$DOCKERHUB_CREDENTIALS_USR --password-stdin"
+                    }
+                }
+            }
+        }
+
+
         stage('Packaging/Pushing images') {
             steps {
-                withDockerRegistry(credentialsId: 'dockerhub', url: 'https://index.docker.io/v1/') {
                     sh 'docker build -t nammtrong023/api-airbnb .'
                     sh 'docker push nammtrong023/api-airbnb'
-                }
             }
         }
 
