@@ -48,7 +48,7 @@ pipeline {
                 sh 'docker network create dev || echo "this network exists"'
                 sh 'echo y | docker container prune '
 
-                sh 'docker container run -d --rm --name nammtrong023/nestjs -p 8080:8080 nammtrong023/nestjs'
+                sh 'docker container run -d --rm --name nammtrong023-nestjs -p 8080:8080 nammtrong023/nestjs'
             }
         }
  
