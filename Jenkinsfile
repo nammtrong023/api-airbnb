@@ -28,9 +28,9 @@ pipeline {
 // dckr_pat_rEUkUPUPUs7qKplLYer3ecHNk5U
         stage('Packaging/Pushing images') {
             steps {
-                    sh 'docker build -t nammtrong/fiver .'
+                    sh 'docker build -t nammtrong023/api-fiver .'
                     echo 'build'
-                    sh 'docker push nammtrong/fiver'
+                    sh 'docker push nammtrong023/api-fiver'
                     echo 'push'
                 }
         }
@@ -53,12 +53,12 @@ pipeline {
         stage('Deploy App to DEV') {
             steps {
                 echo 'Deploying and cleaning'
-                sh 'docker image pull nammtrong/fiver'
-                sh 'docker container stop nammtrong/fiver || echo "this container does not exist" '
+                sh 'docker image pull nammtrong023/api-fiver'
+                sh 'docker container stop nammtrong023/api-fiver || echo "this container does not exist" '
                 sh 'docker network create dev || echo "this network exists"'
                 sh 'echo y | docker container prune '
 
-                sh 'docker container run -d --rm --name nammtrong/fiver -p 8080:8080 nammtrong/fiver'
+                sh 'docker container run -d --rm --name nammtrong023/api-fiver -p 8080:8080 nammtrong023/api-fiver'
             }
         }
  
