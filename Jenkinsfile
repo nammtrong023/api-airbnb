@@ -17,11 +17,16 @@ pipeline {
             }
         }
 
+        stage('Login') {
+            steps {
+               sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+                    echo 'login'
+            }
+    }
+
+// dckr_pat_rEUkUPUPUs7qKplLYer3ecHNk5U
         stage('Packaging/Pushing images') {
             steps {
-                withDockerRegistry(credentialsId: 'dockerhub', url: 'https://index.docker.io/v1/') {
-                    sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
-                    echo 'login'
                     sh 'docker build -t nammtrong/fiver .'
                     echo 'build'
                     sh 'docker push nammtrong/fiver'
