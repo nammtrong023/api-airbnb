@@ -7,7 +7,7 @@ pipeline {
     }
     environment {
         POSTGRES_ROOT_LOGIN = credentials('my-postgres')
-        DOCKER = credentials('dockerhub')
+        DOCKERHUB_CREDENTIALS = credentials('dockerhub')
     }
     stages {
 
@@ -20,6 +20,7 @@ pipeline {
         stage('Packaging/Pushing images') {
             steps {
                 withDockerRegistry(credentialsId: 'dockerhub', url: 'https://index.docker.io/v1/') {
+                    sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
                     echo 'login'
                     sh 'docker build -t nammtrong/fiver .'
                     echo 'build'
