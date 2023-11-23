@@ -2,6 +2,8 @@
 /dist
 /node_modules
 
+.env
+
 # Logs
 logs
 *.log
@@ -12,11 +14,11 @@ yarn-error.log*
 lerna-debug.log*
 
 # environment variables
-.env*.local
-.env*
 
 # OS
 .DS_Store
+
+
 
 # Tests
 /coverage

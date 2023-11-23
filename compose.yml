@@ -5,7 +5,7 @@ services:
     image: postgres:16.1-alpine3.17
     container_name: postgres_db
     environment:
-      POSTGRES_USER: root
+      POSTGRES_USER: nammtrong023
       POSTGRES_PASSWORD: 1234
       POSTGRES_DB: airbnb
     ports:
