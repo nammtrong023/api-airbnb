@@ -12,4 +12,4 @@ RT_SECRET=
 EXP_REFRESH=
 ```
 
-## Trần Trọng Nam ❤️
+## Trần Trọng Nam
