@@ -11,5 +11,3 @@ EXP_ACCESS=
 RT_SECRET=
 EXP_REFRESH=
 ```
-
-## Trần Trọng Nam
